@@ -21,6 +21,7 @@ public class App
 
         Scanner scanner = new Scanner(System.in);
         Random random = new Random();
+        System.out.println("ChatGPT - " + ChatGPTClient.sendRequest("привіт"));
 
         int step = 0;
         User user = new User();
@@ -57,6 +58,8 @@ public class App
                      user.setDate(userMessage);
                  } else if (parts[0].contains("phone")) {
                      user.setPhone(userMessage);
+                 } else {
+                     ChatGPTClient.sendRequest("The short answer about this -" + userMessage);
                  }
             } else if (parts[1].toLowerCase().contains("yes")
                      && userMessage.toLowerCase().contains("yes")) {
@@ -96,42 +99,5 @@ public class App
             System.out.println("File upload error " + filename);
         }
         return lines;
-    }
-}
-
-class User {
-    private String name;
-    private String date;
-    private String phone;
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setDate(String date) {
-        this.date = date;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getDate() {
-        return date;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    @Override
-    public String toString() {
-        return "Name: " + name + "\n" +
-                "Date: " + date + "\n" +
-                "Phone: " + phone;
     }
 }
