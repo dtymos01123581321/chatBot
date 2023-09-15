@@ -11,69 +11,86 @@ import java.util.*;
  */
 public class App
 {
+    private static final List<Integer> TERMINATION_STEPS = Arrays.asList(18, 20);
     public static void main(String[] args) {
         List<String> queries = loadFile("queries.txt");
-
-        if (queries.isEmpty()) {
-            System.out.println("Error: Failed to load data.");
-            return;
-        }
+        checkQueries(queries);
 
         Scanner scanner = new Scanner(System.in);
-        Random random = new Random();
-        System.out.println("ChatGPT - " + ChatGPTClient.sendRequest("привіт"));
-
-        int step = 0;
         User user = new User();
 
+        int step = 0;
         while (true) {
             String[] parts = queries.get(step).split("#");
             System.out.println("ChatBot - " + parts[0]);
-            if (step == 20 || step == 18) {
-                break;
-            }
+
+            if (isTerminationStep(step)) break;
 
             if (parts[1].contains("next")) {
-                step += 1;
+                step++;
                 continue;
             }
 
-            if (step == 14) {
-                System.out.println(user.toString());
-            }
+            if (step == 14) System.out.println(user.toString());
 
-            String nikeName = (user.getName() != null) ? user.getName() : "Guest";
-            System.out.print("                           " + nikeName + ": ");
-            String userMessage = scanner.nextLine();
-             if (userMessage.isEmpty()) {
-                 System.out.println("I didn't understand what you mean. Please try again!");
-                continue;
-            } else if (parts[1].contains("noEmpty") && !userMessage.isEmpty()) {
-                String[] cases = parts[1].split("-");
-                step = getStep(cases, queries);
+            String userMessage = getUserMessage(user.getName(), scanner);
 
-                 if (parts[0].contains("name")) {
-                     user.setName(userMessage);
-                 } else if (parts[0].contains("date")) {
-                     user.setDate(userMessage);
-                 } else if (parts[0].contains("phone")) {
-                     user.setPhone(userMessage);
-                 } else {
-                     ChatGPTClient.sendRequest("The short answer about this -" + userMessage);
-                 }
-            } else if (parts[1].toLowerCase().contains("yes")
-                     && userMessage.toLowerCase().contains("yes")) {
-                String[] cases = parts[1].split("-");
-                step = getStep(cases, queries);
-            } else if (parts[2].toLowerCase().contains("no")
-                     &&  userMessage.toLowerCase().contains("no")) {
-                String[] cases = parts[2].split("-");
-                step = getStep(cases, queries);
-            } else {
-                System.out.println("I didn't understand what you mean. Please try again!");
-             }
+            step = handleUserMessage(parts, userMessage, step, queries, user);
+
             System.out.println("**********************************");
         }
+    }
+
+    private static void checkQueries(List<String> queries) {
+        if (queries.isEmpty()) {
+            System.out.println("Error: Failed to load data.");
+            System.exit(0);
+        }
+    }
+
+    private static boolean isTerminationStep(int step) {
+        return TERMINATION_STEPS.contains(step);
+    }
+
+    private static String getUserMessage(String userName, Scanner scanner) {
+        String nickname = (userName != null) ? userName : "Guest";
+        System.out.print("                           " + nickname + ": ");
+        return scanner.nextLine();
+    }
+
+    private static int handleUserMessage(String[] parts, String userMessage, int step, List<String> queries, User user) {
+        if (userMessage.isEmpty()) {
+            System.out.println("I didn't understand what you mean. Please try again!");
+        } else if (parts[1].contains("noEmpty") && !userMessage.isEmpty()) {
+            step = processNotEmpty(parts, userMessage, queries, user);
+        } else if (responseContains(parts[1], "yes", userMessage) || responseContains(parts[2], "no", userMessage)) {
+            step = getStep(parts[1].split("-"), queries);
+        } else {
+            System.out.println("I didn't understand what you mean. Please try again!");
+        }
+        return step;
+    }
+
+    private static int processNotEmpty(String[] parts, String userMessage, List<String> queries, User user) {
+        switch (parts[0]) {
+            case "name":
+                user.setName(userMessage);
+                break;
+            case "date":
+                user.setDate(userMessage);
+                break;
+            case "phone":
+                user.setPhone(userMessage);
+                break;
+            default:
+                ChatGPTClient.sendRequest("The short answer about this -" + userMessage);
+                break;
+        }
+        return getStep(parts[1].split("-"), queries);
+    }
+
+    private static boolean responseContains(String part, String keyword, String userMessage) {
+        return part.toLowerCase().contains(keyword) && userMessage.toLowerCase().contains(keyword);
     }
 
     private static int getStep(String[] cases, List<String> queries) {
