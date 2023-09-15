@@ -7,36 +7,36 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class ChatGPTClient {
+    private static final String API_KEY = "sk-API_KEY";
+    private static final String URL = "https://api.openai.com/v1/engines/text-davinci-002/completions";
+
     public static String sendRequest(String inputText) {
-        String apiKey = "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";
         StringBuilder response = new StringBuilder();
 
         try {
-            String url = "https://api.openai.com/v1/engines/text-davinci-002/completions";
-            URL obj = new URL(url);
-            HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+            HttpURLConnection con = (HttpURLConnection) new URL(URL).openConnection();
 
-            // Налаштування запиту
             con.setRequestMethod("POST");
             con.setRequestProperty("Content-Type", "application/json");
-            con.setRequestProperty("Authorization", "Bearer " + apiKey);
+            con.setRequestProperty("Authorization", "Bearer " + API_KEY);
 
             String postData = "{\"prompt\":\"" + inputText + "\"}";
 
             con.setDoOutput(true);
-            DataOutputStream wr = new DataOutputStream(con.getOutputStream());
-            wr.writeBytes(postData);
-            wr.flush();
-            wr.close();
 
-            int responseCode = con.getResponseCode();
-            BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-            String inputLine;
-            while ((inputLine = in.readLine()) != null) {
-                response.append(inputLine);
+            try (DataOutputStream wr = new DataOutputStream(con.getOutputStream());
+                 BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()))) {
+
+                wr.writeBytes(postData);
+                wr.flush();
+
+                String inputLine;
+                while ((inputLine = in.readLine()) != null) {
+                    response.append(inputLine);
+                }
             }
-            in.close();
         } catch (Exception e) {
+            System.out.println("Error while sending request: " + e.getMessage());
             e.printStackTrace();
         }
         return response.toString();
