@@ -1,11 +1,12 @@
 package com.undercurrent.backendchatbot.entity.responseEntity;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class OpenAiRequest {
-    private List<Map<String, String>> messages;
+    private List<Map<String, String>> messages = new ArrayList<>();
 
     public List<Map<String, String>> getMessages() {
         return messages;

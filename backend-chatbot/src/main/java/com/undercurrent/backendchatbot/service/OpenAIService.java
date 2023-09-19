@@ -25,6 +25,7 @@ public class OpenAIService {
 
         HttpEntity<OpenAiRequest> entity = new HttpEntity<>(request, headers);
         ResponseEntity<OpenAiResponse> response = restTemplate.exchange(OPENAI_URL, HttpMethod.POST, entity, OpenAiResponse.class);
+        System.out.println("msg  --: 4  " + response.getBody());
 
         return response.getBody();
     }
