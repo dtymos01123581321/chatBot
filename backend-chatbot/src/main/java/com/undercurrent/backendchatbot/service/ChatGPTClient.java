@@ -1,4 +1,4 @@
-package org.example;
+package com.undercurrent.backendchatbot.service;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -42,3 +42,4 @@ public class ChatGPTClient {
         return response.toString();
     }
 }
+
