@@ -57,23 +57,28 @@ body, html {
 
 .chat-message.bot {
     background-color: rgba(225, 225, 225, 0.7);
-    width: 60%;
+    width: 50%;
     text-align: center;
     padding: 15px;
+    margin-left: 50px;
 }
 
 .chat-message.user {
     background-color: rgba(76, 175, 80, 0.7);  /* півпрозорий фон */
     color: white;
     margin-left: auto;
-    max-width: 60%;
+    max-width: 50%;
     padding: 15px;
+}
+
+.chat-message.user .chat-content {
+    margin-left: 5px;
 }
 
 .chat-message.bot::before {
     content: "";
     position: absolute;
-    left: 10px; /* відстань від лівого краю блока повідомлення */
+    left: -50px; /* відстань від лівого краю блока повідомлення */
     top: 50%;
     transform: translateY(-50%); /* центруємо іконку по вертикалі */
     width: 40px; /* ширина іконки */
@@ -85,7 +90,7 @@ body, html {
 .chat-message.user::before {
     content: "";
     position: absolute;
-    left: 10px;
+    left: -50px;
     top: 50%;
     transform: translateY(-50%);
     width: 40px;
@@ -111,6 +116,5 @@ body, html {
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    margin-left: 45px;
     text-align: left;
 }

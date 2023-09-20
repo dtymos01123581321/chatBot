@@ -30,6 +30,13 @@ const ChatBot = () => {
         }
     };
 
+    const handleKeyPress = (event) => {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            handleSend()
+        }
+    }
+
     useEffect(() => {
         scrollToBottom();
     }, [messages]);
@@ -84,7 +91,7 @@ const ChatBot = () => {
                 ))}
             </div>
             <div className="chat-input">
-                <input value={inputValue} onChange={handleInputChange} placeholder="Type your message here..." />
+                <input value={inputValue} onChange={handleInputChange} onKeyDown={handleKeyPress}  placeholder="Type your message here..." />
                 <button onClick={handleSend} className="chat-send" />
             </div>
         </div>
