@@ -50,17 +50,19 @@ public class ChatBotController {
     }
 
     @PostMapping("/message")
-    public ResponseEntity<ResponseMessage> sendMessage(@RequestBody RequestMessage msg) {
-        ResponseMessage responseMessage = chatBotService.getResponseMessage(msg, queries);
+    public ResponseEntity<ResponseMessage> sendMessage(@RequestBody RequestMessage data) {
+        ResponseMessage responseMessage = chatBotService.getResponseMessage(data, queries);
 
         return ResponseEntity.ok(responseMessage);
     }
 
-    @GetMapping("/gpt")
-    public String chatGPT(@RequestParam("prompt") String prompt) {
-        ChatGPTRequest request = new ChatGPTRequest(model, prompt);
+    @PostMapping("/gpt")
+    public ResponseEntity<ResponseMessage> chatGPT(@RequestBody RequestMessage data) {
+        ChatGPTRequest request = new ChatGPTRequest(model, data.getMsg());
         ChatGPTResponse chatGPTResponse = openaiRestTemplate.postForObject(apiUrl, request, ChatGPTResponse.class);
+        ResponseMessage responseMessage = chatBotService.getResponseMessage(data, queries);
+        responseMessage.setMsg(chatGPTResponse.getChoices().get(0).getMessage().getContent());
 
-        return chatGPTResponse.getChoices().get(0).getMessage().getContent();
+        return ResponseEntity.ok(responseMessage);
     }
 }

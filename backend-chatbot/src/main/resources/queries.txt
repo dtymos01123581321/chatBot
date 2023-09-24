@@ -1,5 +1,5 @@
 Welcome to Saint Francis Memorial Hospital!#next-1
-Would you like to schedule an appointment with a doctor? (Yes/No)#yes-2#no-17
+Would you like to schedule an appointment with a doctor? (Yes/No)#yes-2#no-16
 Please state your issue or the doctor you would like to see.#noEmpty-3
 To begin, please tell me your name#noEmpty-4
 What date and time would be convenient for you to meet with the doctor? (ex. YYYY-MM-DD)#noEmpty-5
@@ -11,7 +11,7 @@ If you have medical insurance, please provide your policy number: (ex. EN-888888
 Please provide your email: (ex. example@gmal.com)#noEmpty-11
 Would you like to receive a confirmation email for your appointment? (Yes/No)#yes-12#no-12
 Do you have any additional questions or requirements for the appointment?#noEmpty-13
-Would you like to receive instructions on how to reach us? (Yes/No)#yes-15#no-14
-Do you have any special needs or restrictions we should be aware of?#noEmpty-16
-Address: 900 Hyde St, San Francisco, CA 94109, United States.#next-16
-Appointment scheduling is complete. You are ready for the doctor's visit!
+Would you like to receive instructions on how to reach us? (Yes/No)#yes-16#no-14
+If you want you can ask the AI what hurts you, and we will pass it on to the doctor?#openai-15
+Appointment scheduling is complete. You are ready for the doctor's visit!#
+Address: 900 Hyde St, San Francisco, CA 94109, United States.#next-14
